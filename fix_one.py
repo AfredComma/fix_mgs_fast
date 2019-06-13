@@ -69,7 +69,7 @@ def main_samtools(more_core):
             use_file, text = i.split('xml:')[0] + "xml", i.split('xml:')[1]
             with open(use_file, 'r') as f:
                 texts = f.read()
-            new_texts = texts.replace("samtools sort", "samtools sort @ %s" % str(more_core))
+            new_texts = texts.replace("samtools sort", "samtools sort -@ %s" % str(more_core))
             with open(use_file, 'w') as g:
                 g.write(new_texts)
         # print(i, i + "@ %s" % str(more_core))
