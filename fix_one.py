@@ -61,15 +61,16 @@ def more_str(rep_str, more_core):
         pass
 
 
-def main_samtools(more_core):
-    shs = 'find -type f -name *xml|xargs grep "samtools sort"'
+def main_samtools(more_core, sam_movement="sort"):
+    shs = 'find -type f -name *xml|xargs grep "samtools %s"' % sam_movement
     a = os.popen(shs).read().split('\n')
     for i in a:
         if "xml:" in i:
             use_file, text = i.split('xml:')[0] + "xml", i.split('xml:')[1]
             with open(use_file, 'r') as f:
                 texts = f.read()
-            new_texts = texts.replace("samtools sort", "samtools sort -@ %s" % str(more_core))
+            new_texts = texts.replace("samtools %s" % sam_movement,
+                                      "samtools %s -@ %s" % (sam_movement, str(more_core)))
             with open(use_file, 'w') as g:
                 g.write(new_texts)
         # print(i, i + "@ %s" % str(more_core))
@@ -78,3 +79,4 @@ def main_samtools(more_core):
 if __name__ == '__main__':
     main(16)
     main_samtools(16)
+    main_samtools(16, sam_movement='view')
